@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "raylib.h"
 
 #define BOOL char
@@ -130,8 +132,24 @@ void update () {
                 }
             }
 
-            if (((snake[0].position.x) > (SCREEN_WIDTH - offset.x)) || ((snake[0].position.y) > (SCREEN_HEIGHT - offset.y)) || (snake[0].position.x < 0) || (snake[0].position.y < 0)) {
-                gameOver = TRUE;
+            // if (((snake[0].position.x) > (SCREEN_WIDTH - offset.x)) || ((snake[0].position.y) > (SCREEN_HEIGHT - offset.y)) || (snake[0].position.x < 0) || (snake[0].position.y < 0)) {
+            //     //gameOver = TRUE;
+            // }
+
+            if ((snake[0].position.x) > (SCREEN_WIDTH - offset.x) && snake[0].velocity.x > 1) {
+                snake[0].position.x = offset.x / 2;
+            }
+
+            if ((snake[0].position.y) > (SCREEN_HEIGHT - offset.y) && snake[0].velocity.y > 1) {
+                snake[0].position.y = offset.y / 2;
+            }
+
+            if ((snake[0].position.x) < 0 && snake[0].velocity.x < 1) {
+                snake[0].position.x = SCREEN_WIDTH - (offset.x) / 2;
+            }
+
+            if ((snake[0].position.y) < 0 && snake[0].velocity.y < 1) {
+                snake[0].position.y = SCREEN_HEIGHT - (offset.y) / 2;
             }
 
             for (int i = 1; i < counterTail; i++) {
@@ -175,6 +193,10 @@ void render () {
     ClearBackground((Color) {255, 255, 255, 255});
 
     if (!gameOver) {
+        char c[50];
+        sprintf(c, "(%g, %g)", snake[0].position.x, snake[0].position.y);
+        DrawText(c, 0, 0, 16, BLACK);
+
         for (int i = 0; i < SCREEN_WIDTH / CELL_SIZE + 1; i++) {
             DrawLineV((Vector2){ CELL_SIZE * i + offset.x / 2, offset.y / 2}, (Vector2){ CELL_SIZE * i + offset.x / 2, SCREEN_HEIGHT - offset.y / 2 }, LIGHTGRAY);
         }
